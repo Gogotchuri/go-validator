@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator/v10/non-standard/indiaValidators"
 	"net"
 	"net/url"
 	"os"
@@ -120,6 +121,9 @@ var (
 		"hsla":                          isHSLA,
 		"e164":                          isE164,
 		"email":                         isEmail,
+		"india_gstin":                   isIndiaGSTIN,
+		"india_pan":                     isIndiaPAN,
+		"india_transin":                 isIndiaTransIN,
 		"url":                           isURL,
 		"uri":                           isURI,
 		"urn_rfc2141":                   isUrnRFC2141, // RFC 2141
@@ -190,6 +194,7 @@ var (
 		"fqdn":                          isFQDN,
 		"unique":                        isUnique,
 		"oneof":                         isOneOf,
+		"date_format":                   isValidDateFormat,
 		"html":                          isHTML,
 		"html_encoded":                  isHTMLEncoded,
 		"url_encoded":                   isURLEncoded,
@@ -248,6 +253,19 @@ func isHTMLEncoded(fl FieldLevel) bool {
 
 func isHTML(fl FieldLevel) bool {
 	return hTMLRegex.MatchString(fl.Field().String())
+}
+
+func isValidDateFormat(fl FieldLevel) bool {
+	format := fl.Param()
+	if len(format) == 0 {
+		return false
+	}
+	fieldValue := fl.Field().String()
+	if len(format) != len(fieldValue) {
+		return false
+	}
+	_, err := time.Parse(format, fl.Field().String())
+	return err == nil
 }
 
 func isOneOf(fl FieldLevel) bool {
@@ -1412,6 +1430,21 @@ func isE164(fl FieldLevel) bool {
 // isEmail is the validation function for validating if the current field's value is a valid email address.
 func isEmail(fl FieldLevel) bool {
 	return emailRegex.MatchString(fl.Field().String())
+}
+
+// isIndiaGSTIN is the validation function for validating if the current field's value is a valid indian GSTIN.
+func isIndiaGSTIN(fl FieldLevel) bool {
+	return indiaValidators.IndiaGSTINRegex.MatchString(fl.Field().String())
+}
+
+// isIndiaTransIN is the validation function for validating if the current field's value is a valid indian Transporter Identification Number.
+func isIndiaTransIN(fl FieldLevel) bool {
+	return indiaValidators.IndiaTransINRegex.MatchString(fl.Field().String())
+}
+
+// isIndiaPAN is the validation function for validating if the current field's value is a valid indian Permanent Account Number.
+func isIndiaPAN(fl FieldLevel) bool {
+	return indiaValidators.IndiaPANRegex.MatchString(fl.Field().String())
 }
 
 // isHSLA is the validation function for validating if the current field's value is a valid HSLA color.

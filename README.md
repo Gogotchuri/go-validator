@@ -203,6 +203,11 @@ Baked-in Validations
 | semver | Semantic Versioning 2.0.0 |
 | ulid | Universally Unique Lexicographically Sortable Identifier ULID |
 
+### Country Specific Format:
+| india_gstin | Indian GSTIN format |
+| india_pan | Indian PAN format |
+| india_transin | Indian TransIn format |
+
 ### Comparisons:
 | Tag | Description |
 | - | - |
@@ -237,6 +242,7 @@ Baked-in Validations
 | excluded_without | Excluded Without |
 | excluded_without_all | Excluded Without All |
 | unique | Unique |
+| date_format | Date format checking in string with go standard datetime formats |
 
 #### Aliases:
 | Tag | Description |
