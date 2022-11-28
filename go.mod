@@ -1,4 +1,4 @@
-module github.com/gogotchuri/go-validator/v1
+module github.com/gogotchuri/go-validator
 
 go 1.19
 
