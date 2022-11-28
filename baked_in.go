@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/go-playground/validator/v10/non-standard/indiaValidators"
+	"github.com/gogotchuri/go-validator/non-standard/indiaValidators"
 	"net"
 	"net/url"
 	"os"
