@@ -5484,6 +5484,44 @@ func TestIsEqValidation(t *testing.T) {
 	Equal(t, errs, nil)
 }
 
+func TestDateFormatValidationStruct(t *testing.T) {
+	type DateFormatTest struct {
+		Date string `validate:"date_format=2006-01-02"`
+	}
+	validate := New()
+
+	v := DateFormatTest{Date: "2018-01-01"}
+	errs := validate.Struct(v)
+	Equal(t, errs, nil)
+
+	v = DateFormatTest{Date: "2018-01-01 00:00:00"}
+	errs = validate.Struct(v)
+	NotEqual(t, errs, nil)
+
+	v = DateFormatTest{Date: "2018/01/01"}
+	errs = validate.Struct(v)
+	NotEqual(t, errs, nil)
+}
+
+func TestDateFormatValidation(t *testing.T) {
+	validate := New()
+
+	errs := validate.Var("2018-01-01", "date_format=2006-01-02")
+	Equal(t, errs, nil)
+
+	errs = validate.Var("2018-01-01 00:00:00", "date_format=2006-01-02 15:04:05")
+	Equal(t, errs, nil)
+
+	errs = validate.Var("2018-01-01 00:00:00", "date_format=2006-01-02")
+	NotEqual(t, errs, nil)
+
+	errs = validate.Var("2018/01/01", "date_format=2006-01-02")
+	NotEqual(t, errs, nil)
+
+	errs = validate.Var("2018-01-01 00", "date_format=2006-01-02 15:04")
+	NotEqual(t, errs, nil)
+}
+
 func TestOneOfValidation(t *testing.T) {
 	validate := New()
 
@@ -8092,6 +8130,123 @@ func TestRgb(t *testing.T) {
 	errs = validate.Var(i, "rgb")
 	NotEqual(t, errs, nil)
 	AssertError(t, errs, "", "", "", "", "rgb")
+}
+
+func TestIndiaGSTINStruct(t *testing.T) {
+	type IndiaGSTIN struct {
+		GSTIN string `validate:"india_gstin"`
+	}
+	validate := New()
+
+	s := IndiaGSTIN{GSTIN: "29AABCS1234A1Z5"}
+	err := validate.Struct(s)
+	Equal(t, err, nil)
+
+	s.GSTIN = "29AABCS"
+	err = validate.Struct(s)
+	NotEqual(t, err, nil)
+}
+
+func TestIndiaGSTIN(t *testing.T) {
+	validate := New()
+
+	s := "29AABCS1234A1Z5"
+	errs := validate.Var(s, "india_gstin")
+	Equal(t, errs, nil)
+
+	s = "40AABCS1564AVZ1"
+	errs = validate.Var(s, "india_gstin")
+	Equal(t, errs, nil)
+
+	s = "29AABCS1234A1ZT"
+	errs = validate.Var(s, "india_gstin")
+	Equal(t, errs, nil)
+
+	s = "29AABCS1234A1T5"
+	errs = validate.Var(s, "india_gstin")
+	NotEqual(t, errs, nil)
+
+	s = "29AA5CS1234A1Z5"
+	errs = validate.Var(s, "india_gstin")
+	NotEqual(t, errs, nil)
+}
+
+func TestIndiaPANStruct(t *testing.T) {
+	type IndiaPAN struct {
+		PAN string `validate:"india_pan"`
+	}
+	validate := New()
+
+	s := IndiaPAN{PAN: "AABCS1234A"}
+	err := validate.Struct(s)
+	Equal(t, err, nil)
+
+	s.PAN = "AABCS12345"
+	err = validate.Struct(s)
+	NotEqual(t, err, nil)
+}
+
+func TestIndiaPAN(t *testing.T) {
+	validate := New()
+
+	s := "AABCS1234A"
+	errs := validate.Var(s, "india_pan")
+	Equal(t, errs, nil)
+
+	s = "AABCZ1234A"
+	errs = validate.Var(s, "india_pan")
+	Equal(t, errs, nil)
+
+	s = "AABCS12345"
+	errs = validate.Var(s, "india_pan")
+	NotEqual(t, errs, nil)
+
+	s = "A5BCS1564A"
+	errs = validate.Var(s, "india_pan")
+	NotEqual(t, errs, nil)
+
+	s = "AAC41234A1"
+	errs = validate.Var(s, "india_pan")
+	NotEqual(t, errs, nil)
+}
+
+func TestIndiaTransInStruct(t *testing.T) {
+	type IndiaTransIn struct {
+		TransIn string `validate:"india_transin"`
+	}
+	validate := New()
+
+	s := IndiaTransIn{TransIn: "2233AABCS1234A5"}
+	err := validate.Struct(s)
+	Equal(t, err, nil)
+
+	s.TransIn = "A233AABCS1234A5"
+	err = validate.Struct(s)
+	NotEqual(t, err, nil)
+}
+
+func TestIndiaTransIn(t *testing.T) {
+	validate := New()
+
+	s := "29AABCS1234A1Z5"
+	errs := validate.Var(s, "india_transin")
+	Equal(t, errs, nil)
+
+	s = "405555899632145"
+	errs = validate.Var(s, "india_transin")
+	Equal(t, errs, nil)
+
+	s = "29AABCS1234A155"
+	errs = validate.Var(s, "india_transin")
+	Equal(t, errs, nil)
+
+	s = "2KAABCS1234A1T5"
+	errs = validate.Var(s, "india_transin")
+	NotEqual(t, errs, nil)
+
+	s = "HHAA5CS1234A1Z5"
+	errs = validate.Var(s, "india_transin")
+	NotEqual(t, errs, nil)
 }
 
 func TestEmail(t *testing.T) {

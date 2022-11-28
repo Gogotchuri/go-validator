@@ -319,6 +319,7 @@ BenchmarkStructComplexFailure-8                                   300000        
 BenchmarkStructComplexFailureParallel-8                          1000000              2127 ns/op            3041 B/op         53 allocs/op
 BenchmarkOneof-8                                                10000000               140 ns/op               0 B/op          0 allocs/op
 BenchmarkOneofParallel-8                                        20000000                70.1 ns/op             0 B/op          0 allocs/op
+BenchmarkDateFormat-8   	                                     6000000	           190 ns/op               0 B/op          0 allocs/op
 ```
 
 Complementary Software

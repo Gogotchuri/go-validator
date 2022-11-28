@@ -1036,6 +1036,22 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			translation: "{0} must be a valid Base64 string",
 			override:    false,
 		},
+		//India regex messages
+		{
+			tag:         "india_gstin",
+			translation: "{0} must be in a valid GSTIN format",
+			override:    false,
+		},
+		{
+			tag:         "india_pan",
+			translation: "{0} must be in a valid PAN format",
+			override:    false,
+		},
+		{
+			tag:         "india_transin",
+			translation: "{0} must be in a valid TransIN format",
+			override:    false,
+		},
 		{
 			tag:         "contains",
 			translation: "{0} must contain the text '{1}'",
@@ -1279,6 +1295,19 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		{
 			tag:         "oneof",
 			translation: "{0} must be one of [{1}]",
+			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				s, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				if err != nil {
+					log.Printf("warning: error translating FieldError: %#v", fe)
+					return fe.(error).Error()
+				}
+				return s
+			},
+		},
+		{
+			tag:         "date_format",
+			translation: "{0} must be of type date with the format '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 				s, err := ut.T(fe.Tag(), fe.Field(), fe.Param())

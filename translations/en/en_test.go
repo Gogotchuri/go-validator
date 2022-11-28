@@ -138,6 +138,7 @@ func TestTranslations(t *testing.T) {
 		StrPtrLte         *string           `validate:"lte=1"`
 		StrPtrGt          *string           `validate:"gt=10"`
 		StrPtrGte         *string           `validate:"gte=10"`
+		DateFormat        string            `validate:"date_format=2006-01-02"`
 		OneOfString       string            `validate:"oneof=red green"`
 		OneOfInt          int               `validate:"oneof=5 63"`
 		UniqueSlice       []string          `validate:"unique"`
@@ -152,6 +153,10 @@ func TestTranslations(t *testing.T) {
 		PostCodeCountry   string
 		PostCodeByField   string `validate:"postcode_iso3166_alpha2_field=PostCodeCountry"`
 		BooleanString     string `validate:"boolean"`
+
+		IndiaGSTIN   string `validate:"india_gstin"`
+		IndiaPAN     string `validate:"india_pan"`
+		IndiaTransIN string `validate:"india_transin"`
 	}
 
 	var test Test
@@ -381,6 +386,18 @@ func TestTranslations(t *testing.T) {
 		{
 			ns:       "Test.URI",
 			expected: "URI must be a valid URI",
+		},
+		{
+			ns:       "Test.IndiaGSTIN",
+			expected: "IndiaGSTIN must be in a valid GSTIN format",
+		},
+		{
+			ns:       "Test.IndiaPAN",
+			expected: "IndiaPAN must be in a valid PAN format",
+		},
+		{
+			ns:       "Test.IndiaTransIN",
+			expected: "IndiaTransIN must be in a valid TransIN format",
 		},
 		{
 			ns:       "Test.RGBColorString",
@@ -645,6 +662,10 @@ func TestTranslations(t *testing.T) {
 		{
 			ns:       "Test.OneOfInt",
 			expected: "OneOfInt must be one of [5 63]",
+		},
+		{
+			ns:       "Test.DateFormat",
+			expected: "DateFormat must be of type date with the format '2006-01-02'",
 		},
 		{
 			ns:       "Test.UniqueSlice",

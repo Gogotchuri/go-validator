@@ -1097,3 +1097,16 @@ func BenchmarkOneofParallel(b *testing.B) {
 		}
 	})
 }
+
+// date_format benchmarks
+type benchDateFormat struct {
+	Date string `validate:"date_format=2006-01-02"`
+}
+
+func BenchmarkDateFormat(b *testing.B) {
+	w := &benchDateFormat{Date: "2016-09-05"}
+	val := New()
+	for i := 0; i < b.N; i++ {
+		_ = val.Struct(w)
+	}
+}
